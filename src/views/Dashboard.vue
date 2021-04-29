@@ -1,12 +1,20 @@
 <template>
   <div>
     <div v-for="project in this.$store.state.projects" :key="project.id">
-      {{ project.name }} {{ (project.sum / 60 / 60).toFixed(2) }} Hours
+      {{ project.name }} {{ getTime(project.sum) }}
     </div>
     Goals:
     <div v-for="goal in this.goals" :key="goal.name">
-      {{ goal.name }} {{ (goal.value / 60 / 60).toFixed(2) }} Hours
-      {{ goal.min }} min {{ goal.max }} max
+      {{ goal.name }}
+      <v-progress-linear
+        :value="(100 / goal.min) * goal.value"
+        color="amber"
+        height="50"
+      >
+        <!-- {{ ((100 / goal.min) * goal.value).toFixed() }}% -->
+        <br />
+        {{ getTime(goal.value) }} / {{ getTime(goal.min) }}
+      </v-progress-linear>
     </div>
   </div>
 </template>
@@ -26,6 +34,15 @@ export default {
     console.log(this.getPreviousMonday());
   },
   methods: {
+    getHours(seconds) {
+      return (Math.round((seconds / 60 / 60) * 100) / 100).toFixed(2);
+    },
+    getMinutes(seconds) {
+      return (Math.round((seconds / 60) * 100) / 100).toFixed(2);
+    },
+    getTime(seconds) {
+      return new Date(seconds * 1000).toISOString().substr(11, 8);
+    },
     getPreviousMonday() {
       var date = new Date();
       var day = date.getDay();
@@ -39,6 +56,8 @@ export default {
       return prevMonday.toISOString();
     },
     setDisplay() {
+      this.projects = [];
+      this.goals = [];
       this.$store.state.projectGoals.forEach((goal) => {
         console.log(
           goal,

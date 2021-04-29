@@ -9,7 +9,7 @@ export default new Vuex.Store({
     timeEntries: [],
     projectGoals: [{
       name: "Exercise",
-      min: 3
+      min: (1.5 * 60 * 60)
     }],
   },
   mutations: {
