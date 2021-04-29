@@ -15,7 +15,7 @@
 <script>
 export default {
   mounted() {
-    // this.$router.push("/Dashboard").catch(() => {});
+    this.$router.push("/Dashboard").catch(() => {});
   },
 };
 </script>

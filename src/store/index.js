@@ -5,16 +5,15 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    projects: [{
-      Title: "Exercise",
-      id: 161873998,
-      sum: 0
-    }],
+    projects: [],
     timeEntries: []
   },
   mutations: {
     setTimeEntries(state, payload) {
       state.timeEntries = payload;
+    },
+    addProject(state, payload) {
+      state.projects.push(payload);
     },
   },
   actions: {},
