@@ -16,16 +16,29 @@ export default {
   },
   created() {
     this.updateTimeEntries();
-  },
 
+    console.log(this.getPreviousMonday());
+  },
   methods: {
+    getPreviousMonday() {
+      var date = new Date();
+      var day = date.getDay();
+      var prevMonday = new Date();
+      if (date.getDay() == 0) {
+        prevMonday.setDate(date.getDate() - 7);
+      } else {
+        prevMonday.setDate(date.getDate() - (day - 1));
+      }
+      prevMonday.setHours(0, 0, 0, 0);
+      return prevMonday.toISOString();
+    },
     setDisplay() {
       this.$store.state.projects.forEach((proj) => {
         let display = proj;
         display.sum = 0;
         this.$store.state.timeEntries.forEach((entry) => {
           if (entry.pid == proj.id) {
-            display.sum += entry.duration;
+            if (entry.duration > 0) display.sum += entry.duration;
           }
         });
         this.projects.push(display);
@@ -34,15 +47,20 @@ export default {
     updateTimeEntries() {
       if (this.$store.state.timeEntries.length == 0) {
         console.log("getting timeEntries");
-        this.$toggl.getTimeEntries(null, null, (err, timeEntries) => {
-          if (err) {
-            console.log("error: ", err);
-          } else {
-            console.log("recieved: ", timeEntries.length);
-            this.$store.commit("setTimeEntries", timeEntries);
-            this.updateProjects();
+        var today = new Date();
+        this.$toggl.getTimeEntries(
+          this.getPreviousMonday(),
+          today.toISOString(),
+          (err, timeEntries) => {
+            if (err) {
+              console.log("error: ", err);
+            } else {
+              console.log("recieved: ", timeEntries.length);
+              this.$store.commit("setTimeEntries", timeEntries);
+              this.updateProjects();
+            }
           }
-        });
+        );
       } else {
         console.log("not getting timeEntries");
         this.updateProjects();
