@@ -6,7 +6,11 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     projects: [],
-    timeEntries: []
+    timeEntries: [],
+    projectGoals: [{
+      name: "Exercise",
+      min: 3
+    }],
   },
   mutations: {
     setTimeEntries(state, payload) {

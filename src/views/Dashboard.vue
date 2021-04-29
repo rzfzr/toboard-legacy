@@ -3,6 +3,11 @@
     <div v-for="project in this.$store.state.projects" :key="project.id">
       {{ project.name }} {{ (project.sum / 60 / 60).toFixed(2) }} Hours
     </div>
+    Goals:
+    <div v-for="goal in this.goals" :key="goal.name">
+      {{ goal.name }} {{ (goal.value / 60 / 60).toFixed(2) }} Hours
+      {{ goal.min }} min {{ goal.max }} max
+    </div>
   </div>
 </template>
 <script>
@@ -12,6 +17,7 @@ export default {
   data() {
     return {
       projects: [],
+      goals: [],
     };
   },
   created() {
@@ -33,6 +39,19 @@ export default {
       return prevMonday.toISOString();
     },
     setDisplay() {
+      this.$store.state.projectGoals.forEach((goal) => {
+        console.log(
+          goal,
+          this.$store.state.projects.find((x) => x.name == goal.name)
+        );
+        let display = goal;
+        display.value = this.$store.state.projects.find(
+          (x) => x.name == goal.name
+        ).sum;
+
+        this.goals.push(display);
+      });
+
       this.$store.state.projects.forEach((proj) => {
         let display = proj;
         display.sum = 0;
