@@ -5,11 +5,13 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    timeEntries: []
   },
   mutations: {
+    setTimeEntries(state, payload) {
+      state.timeEntries = payload;
+    },
   },
-  actions: {
-  },
-  modules: {
-  }
+  actions: {},
+  modules: {}
 })
