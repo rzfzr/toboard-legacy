@@ -86,7 +86,7 @@ export default {
   },
   methods: {
     toggle(description, project) {
-      this.$toggl.getCurrentTimeEntry(function (err, timeEntry) {
+      this.$toggl.getCurrentTimeEntry((err, timeEntry) => {
         if (err) console.log(err);
         else {
           if (timeEntry) {
@@ -97,7 +97,8 @@ export default {
             this.$toggl.startTimeEntry(
               {
                 description: description,
-                project: project,
+                pid: this.$store.state.projects.find((x) => x.name == project)
+                  .id,
               },
               function (err, timeEntry) {
                 if (err) console.log(err);
