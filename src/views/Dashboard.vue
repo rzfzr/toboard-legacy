@@ -1,19 +1,56 @@
 <template>
   <div>
-    <div v-for="goal in this.goals" :key="goal.name">
-      <v-progress-linear
-        :value="(100 / goal.min) * goal.value"
-        :color="goal.hex_color"
+    <v-hover v-slot:default="{ hover }">
+      <v-card
+        :elevation="hover ? 12 : 2"
+        class="mx-auto"
         height="50"
+        max-width="650"
+        color="dark"
       >
-        <div style="margin-right: 5%">
-          {{ goal.name }}
-        </div>
-        {{ ((100 / goal.min) * goal.value).toFixed(2) }}%
-        <br />
-        {{ getTime(goal.value) }} / {{ getTime(goal.min) }}
-      </v-progress-linear>
-    </div>
+        <v-progress-linear :value="(100 / 30) * 10" color="grey" height="50">
+          <div style="margin-right: 5%">Week (placeholder/idea)</div>
+          <!-- {{ ((100 / goal.min) * goal.value).toFixed(2) }}% -->
+          <!-- <br /> -->
+          {{ getTime(10000) }} / {{ getTime(20000) }}
+        </v-progress-linear>
+      </v-card>
+    </v-hover>
+
+    <v-hover
+      v-slot:default="{ hover }"
+      v-for="goal in this.goals"
+      :key="goal.name"
+    >
+      <v-card
+        :elevation="hover ? 12 : 2"
+        class="mx-auto"
+        height="50"
+        max-width="550"
+        color="dark"
+      >
+        <v-progress-linear
+          :value="(100 / goal.min) * goal.value"
+          :color="goal.hex_color"
+          :stream="goal.isRunning"
+          buffer-value="0"
+          height="50"
+        >
+          <div style="margin-right: 5%">
+            {{ goal.name }}
+          </div>
+          <v-btn v-show="hover" fab small :color="goal.hex_color">
+            <v-icon dark> mdi-play </v-icon>
+          </v-btn>
+          <div style="margin-left: 5%">
+            {{ getTime(goal.value) }} / {{ getTime(goal.min) }} ({{
+              ((100 / goal.min) * goal.value).toFixed(2)
+            }}%)
+          </div>
+        </v-progress-linear>
+      </v-card>
+    </v-hover>
+
     <div
       style="margin: auto; width: 20%"
       v-for="project in this.$store.state.projects"
@@ -46,9 +83,10 @@ export default {
         h > 0 ? `${h.toString().length > 1 ? `${h}` : `${0}${h}`}` : "00";
       const mDisplay =
         m > 0 ? `${m.toString().length > 1 ? `${m}` : `${0}${m}`}` : "00";
-      const sDisplay =
-        s > 0 ? `${s.toString().length > 1 ? `${s}` : `${0}${s}`}` : "00";
-      return `${hDisplay}:${mDisplay}:${sDisplay}`;
+      // const sDisplay =
+      //   s > 0 ? `${s.toString().length > 1 ? `${s}` : `${0}${s}`}` : "00";
+      // return `${hDisplay}:${mDisplay}:${sDisplay}`;
+      return `${hDisplay}:${mDisplay}`;
     },
     getPreviousMonday() {
       var date = new Date();
@@ -70,6 +108,17 @@ export default {
           (x) => x.name == goal.name
         );
         if (goalProj) {
+          //check if project is current
+          if (
+            this.$store.state.timeEntries.findIndex(
+              (x) => x.pid == goalProj.id && x.duration < 0
+            ) != -1
+          ) {
+            goal.isRunning = true;
+          } else {
+            goal.isRunning = false;
+          }
+
           let display = goal;
           display.hex_color = goalProj.hex_color;
           display.value = goalProj.sum;
