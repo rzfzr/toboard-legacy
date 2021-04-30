@@ -8,11 +8,15 @@
         max-width="650"
         color="dark"
       >
-        <v-progress-linear :value="(100 / 30) * 10" color="grey" height="50">
+        <v-progress-linear
+          :value="(100 / 168) * getProgress()"
+          color="grey"
+          height="50"
+        >
           <div style="margin-right: 5%">Week (placeholder/idea)</div>
-          <!-- {{ ((100 / goal.min) * goal.value).toFixed(2) }}% -->
-          <!-- <br /> -->
-          {{ getTime(10000) }} / {{ getTime(20000) }}
+          {{ getProgress().toFixed() }} / {{ 168 }} ({{
+            ((100 / 168) * getProgress()).toFixed(2)
+          }}%)
         </v-progress-linear>
       </v-card>
     </v-hover>
@@ -39,8 +43,14 @@
           <div style="margin-right: 5%">
             {{ goal.name }}
           </div>
-          <v-btn v-show="hover" fab small :color="goal.hex_color">
-            <v-icon dark> mdi-play </v-icon>
+          <v-btn
+            v-show="hover"
+            fab
+            small
+            :color="colorShade(goal.hex_color, +40)"
+          >
+            <v-icon dark v-if="goal.isRunning"> mdi-pause </v-icon>
+            <v-icon dark v-else> mdi-play </v-icon>
           </v-btn>
           <div style="margin-left: 5%">
             {{ getTime(goal.value) }} / {{ getTime(goal.min) }} ({{
@@ -74,11 +84,38 @@ export default {
     this.updateTimeEntries();
   },
   methods: {
+    getProgress() {
+      var date = new Date().toISOString();
+      let mon = this.getPreviousMonday();
+      return Math.abs(Date.parse(date) - Date.parse(mon)) / 36e5;
+    },
+    colorShade(col, amt) {
+      col = col.replace(/^#/, "");
+      if (col.length === 3)
+        col = col[0] + col[0] + col[1] + col[1] + col[2] + col[2];
+
+      let [r, g, b] = col.match(/.{2}/g);
+      [r, g, b] = [
+        parseInt(r, 16) + amt,
+        parseInt(g, 16) + amt,
+        parseInt(b, 16) + amt,
+      ];
+
+      r = Math.max(Math.min(255, r), 0).toString(16);
+      g = Math.max(Math.min(255, g), 0).toString(16);
+      b = Math.max(Math.min(255, b), 0).toString(16);
+
+      const rr = (r.length < 2 ? "0" : "") + r;
+      const gg = (g.length < 2 ? "0" : "") + g;
+      const bb = (b.length < 2 ? "0" : "") + b;
+
+      return `#${rr}${gg}${bb}`;
+    },
     getTime(seconds) {
       const d = Number(seconds);
       const h = Math.floor(d / 3600);
       const m = Math.floor((d % 3600) / 60);
-      const s = Math.floor((d % 3600) % 60);
+      // const s = Math.floor((d % 3600) % 60);
       const hDisplay =
         h > 0 ? `${h.toString().length > 1 ? `${h}` : `${0}${h}`}` : "00";
       const mDisplay =
@@ -168,7 +205,6 @@ export default {
             if (err) {
               console.log("error: ", err);
             } else {
-              console.log("recieved: ", timeEntries.length);
               this.$store.commit("setTimeEntries", timeEntries);
               this.updateProjects();
             }
