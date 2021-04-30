@@ -24,7 +24,7 @@
     <v-hover
       v-slot:default="{ hover }"
       v-for="goal in this.goals"
-      :key="goal.project"
+      :key="goal.project + goal.description"
     >
       <v-card
         :elevation="hover ? 12 : 2"
