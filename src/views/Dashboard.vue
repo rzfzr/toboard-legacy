@@ -9,13 +9,13 @@
         color="dark"
       >
         <v-progress-linear
-          :value="(100 / 168) * getProgress()"
+          :value="(100 / 168) * getWeekProgress()"
           color="grey"
           height="50"
         >
           <div style="margin-right: 5%">Week Progress</div>
-          {{ getProgress().toFixed() }} / {{ 168 }} ({{
-            ((100 / 168) * getProgress()).toFixed(2)
+          {{ getWeekProgress().toFixed() }} / {{ 168 }} ({{
+            ((100 / 168) * getWeekProgress()).toFixed(2)
           }}%)
         </v-progress-linear>
       </v-card>
@@ -32,15 +32,18 @@
       v-for="project in this.$store.state.projects"
       :key="project.id"
     >
-      {{ project.name }} {{ project.sum }}
+      {{ project.name }} {{ getTime(project.sum) }}
     </div>
   </div>
 </template>
 <script>
 import Goal from "../components/Goal.vue";
+import datesMixin from "../mixins/dates";
+import togglMixin from "../mixins/toggl";
 
 export default {
   name: "Dashboard",
+  mixins: [datesMixin, togglMixin],
   components: {
     Goal,
   },
@@ -54,40 +57,6 @@ export default {
     this.updateTimeEntries();
   },
   methods: {
-    createEntry(description, project) {
-      this.$toggl.startTimeEntry(
-        {
-          description: description,
-          pid: this.$store.state.projects.find((x) => x.name == project).id,
-        },
-        (err, timeEntry) => {
-          if (err) console.log(err);
-          else {
-            console.log("succefully started: ", timeEntry);
-            this.$store.state.timeEntries.push(timeEntry);
-          }
-        }
-      );
-    },
-
-    getProgress() {
-      var date = new Date().toISOString();
-      let mon = this.getPreviousMonday();
-      return Math.abs(Date.parse(date) - Date.parse(mon)) / 36e5;
-    },
-
-    getPreviousMonday() {
-      var date = new Date();
-      var day = date.getDay();
-      var prevMonday = new Date();
-      if (date.getDay() == 0) {
-        prevMonday.setDate(date.getDate() - 7);
-      } else {
-        prevMonday.setDate(date.getDate() - (day - 1));
-      }
-      prevMonday.setHours(0, 0, 0, 0);
-      return prevMonday.toISOString();
-    },
     getSumEntries(description) {
       let goalEntries = [];
       let goalSum = 0;

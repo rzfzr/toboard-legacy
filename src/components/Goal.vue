@@ -38,8 +38,12 @@
 </template>
 
 <script>
+import datesMixin from "../mixins/dates";
+import togglMixin from "../mixins/toggl";
+
 export default {
   name: "goal",
+  mixins: [datesMixin, togglMixin],
   data: () => ({}),
   props: {
     goal: {
@@ -49,44 +53,7 @@ export default {
       },
     },
   },
-  mounted() {
-    console.log("component", this.goal);
-  },
   methods: {
-    getTime(seconds, showSeconds = false) {
-      const d = Number(seconds);
-      const h = Math.floor(d / 3600);
-      const m = Math.floor((d % 3600) / 60);
-      const s = Math.floor((d % 3600) % 60);
-      const hDisplay =
-        h > 0 ? `${h.toString().length > 1 ? `${h}` : `${0}${h}`}` : "00";
-      const mDisplay =
-        m > 0 ? `${m.toString().length > 1 ? `${m}` : `${0}${m}`}` : "00";
-      const sDisplay =
-        s > 0 ? `${s.toString().length > 1 ? `${s}` : `${0}${s}`}` : "00";
-      if (showSeconds) return `${hDisplay}:${mDisplay}:${sDisplay}`;
-      else return `${hDisplay}:${mDisplay}`;
-    },
-    toggle(description, project) {
-      this.$toggl.getCurrentTimeEntry((err, timeEntry) => {
-        if (err) console.log(err);
-        else {
-          if (timeEntry) {
-            console.log("something already running ");
-            if (timeEntry.description == description) {
-              this.$toggl.stopTimeEntry(timeEntry.id, (err, timeEntry) => {
-                if (err) console.log(err);
-                else console.log("succefully stopped ", timeEntry);
-              });
-            } else {
-              this.createEntry(description, project);
-            }
-          } else {
-            this.createEntry(description, project);
-          }
-        }
-      });
-    },
     colorShade(col, amt) {
       col = col.replace(/^#/, "");
       if (col.length === 3)

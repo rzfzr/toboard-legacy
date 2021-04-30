@@ -12,7 +12,7 @@ export default new Vuex.Store({
       min: (2 * 60 * 60)
     }, {
       project: "ClicNet",
-      min: (40 * 60 * 60)
+      min: (60 * 60 * 60)
     }, {
       project: "Masters",
       min: (10 * 60 * 60)
@@ -23,7 +23,7 @@ export default new Vuex.Store({
     }, {
       project: "ClicNet",
       description: "AThingADay",
-      min: (1 * 60 * 60)
+      min: (3 * 60 * 60)
     }],
   },
   mutations: {
