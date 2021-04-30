@@ -8,34 +8,42 @@ export default new Vuex.Store({
     timeEntries: [],
     runningEntry: {},
     goals: [{
-      project: "Exercise",
-      min: (2 * 60 * 60),
-      isRunning: false,
-    }, {
-      project: "ClicNet",
-      min: (60 * 60 * 60),
-      isRunning: false,
-    }, {
-      project: "Masters",
-      min: (10 * 60 * 60),
-      isRunning: false,
-    }, {
-      project: "Personal",
-      description: "Reading",
-      min: (2 * 60 * 60),
-      isRunning: false,
-    }, {
-      project: "ClicNet",
-      description: "AThingADay",
-      min: (10 * 60 * 60),
-      isRunning: false,
-    }, {
-      project: "ClicNet",
-      pid: 158359448,
-      description: "toboard",
-      min: (20 * 60 * 60),
-      isRunning: false,
-    }],
+        project: "Exercise",
+        min: (2 * 60 * 60),
+        isRunning: false,
+      },
+      {
+        project: "Masters",
+        min: (10 * 60 * 60),
+        isRunning: false,
+      },
+      {
+        project: "Personal",
+        description: "Reading",
+        min: (2 * 60 * 60),
+        isRunning: false,
+      },
+      {
+        project: "ClicNet",
+        pid: 158359448,
+        min: (60 * 60 * 60),
+        isRunning: false,
+      },
+      {
+        project: "ClicNet",
+        pid: 158359448,
+        description: "AThingADay",
+        min: (10 * 60 * 60),
+        isRunning: false,
+      },
+      {
+        project: "ClicNet",
+        pid: 158359448,
+        description: "toboard",
+        min: (20 * 60 * 60),
+        isRunning: false,
+      },
+    ],
   },
   mutations: {
     setTimeEntries(state, payload) {
@@ -57,10 +65,10 @@ export default new Vuex.Store({
       if (!payload) return
       let fullMatchIndex = goals.findIndex(x => x.description == payload.description && x.pid == payload.pid)
       let projMatchIndex = goals.findIndex(x => !x.description && x.pid == payload.pid)
-
+      console.log('full', fullMatchIndex, projMatchIndex);
       if (fullMatchIndex != -1)
         goals[fullMatchIndex].isRunning = true
-      else if (projMatchIndex != -1)
+      if (projMatchIndex != -1)
         goals[projMatchIndex].isRunning = true
       state.goals = goals
     },

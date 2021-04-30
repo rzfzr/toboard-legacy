@@ -11,6 +11,8 @@
         :value="(100 / 168) * getWeekProgress()"
         color="grey"
         height="50"
+        buffer-value="0"
+        stream
       >
         <div style="margin-right: 5%">Week Progress</div>
         {{ getWeekProgress().toFixed() }} / {{ 168 }} ({{

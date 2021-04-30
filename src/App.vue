@@ -1,19 +1,42 @@
 <template>
   <v-app>
-    <v-app-bar app color="#2C1338" dark>
-      <v-spacer></v-spacer>
-      <span style="color: #dd6fd1; font-weight: 900; font-size: 40px"
-        >toboard</span
-      >
-      <v-spacer></v-spacer>
-    </v-app-bar>
+    <div style="height: 50px">
+      <v-hover v-slot="{ hover }">
+        <v-app-bar app color="#2C1338" dark>
+          <div
+            v-if="!hover"
+            class="text-center"
+            style="
+              color: #dd6fd1;
+              font-weight: 900;
+              font-size: 40px;
+              width: 100%;
+            "
+          >
+            toboard
+          </div>
+          <v-tabs
+            v-else
+            class="tabs"
+            centered
+            grow
+            v-model="activeTab"
+            color="#dd6fd1"
+            background-color="#2C1338"
+          >
+            <v-tab v-for="tab in tabs" :key="tab.route" :to="tab.route" exact>
+              {{ tab.name }}
+            </v-tab>
+          </v-tabs>
 
+          <!-- <v-expand-transition style="height: 100%">
+          <div v-if="hover" style="height: 100%">
+          </div>
+        </v-expand-transition> -->
+        </v-app-bar>
+      </v-hover>
+    </div>
     <v-main>
-      <v-tabs class="tabs" centered grow height="60px" v-model="activeTab">
-        <v-tab v-for="tab in tabs" :key="tab.route" :to="tab.route" exact>
-          {{ tab.name }}
-        </v-tab>
-      </v-tabs>
       <router-view />
     </v-main>
   </v-app>
@@ -23,10 +46,16 @@
 export default {
   data() {
     return {
-      activeTab: `/user/${this.id}`,
+      showTabs: false,
+      activeTab: `/user/`,
       tabs: [
         { name: "Home", route: `/home` },
-        { name: "Weekly", route: `/Dashboard` },
+        // { name: "Daily", route: `/dashboard` },
+        { name: "Weekly", route: `/dashboard` },
+        // { name: "Monthly", route: `/dashboard` },
+        // { name: "Yearly", route: `/dashboard` },
+        { name: "Favorites", route: `/favorites` },
+        { name: "Settings", route: `/settings` },
       ],
     };
   },

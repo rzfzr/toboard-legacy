@@ -6,13 +6,13 @@
       :key="goal.project + goal.description"
       v-bind:goal="goal"
     />
-    <div
+    <!-- <div
       style="margin: auto; width: 20%"
       v-for="project in this.$store.state.projects"
       :key="project.id"
     >
       {{ project.name }} {{ getTime(project.sum) }}
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
