@@ -9,7 +9,17 @@ export default new Vuex.Store({
     timeEntries: [],
     projectGoals: [{
       name: "Exercise",
-      min: (1.5 * 60 * 60)
+      min: (2 * 60 * 60)
+    }, {
+      name: "ClicNet",
+      min: (40 * 60 * 60)
+    }, {
+      name: "Masters",
+      min: (10 * 60 * 60)
+    }],
+    entriesGoals: [{
+      name: "Reading",
+      min: (2 * 60 * 60)
     }],
   },
   mutations: {

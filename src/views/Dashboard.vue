@@ -1,20 +1,25 @@
 <template>
   <div>
-    <div v-for="project in this.$store.state.projects" :key="project.id">
-      {{ project.name }} {{ getTime(project.sum) }}
-    </div>
-    Goals:
     <div v-for="goal in this.goals" :key="goal.name">
-      {{ goal.name }}
       <v-progress-linear
         :value="(100 / goal.min) * goal.value"
-        color="amber"
+        :color="goal.hex_color"
         height="50"
       >
-        <!-- {{ ((100 / goal.min) * goal.value).toFixed() }}% -->
+        <div style="margin-right: 5%">
+          {{ goal.name }}
+        </div>
+        {{ ((100 / goal.min) * goal.value).toFixed(2) }}%
         <br />
         {{ getTime(goal.value) }} / {{ getTime(goal.min) }}
       </v-progress-linear>
+    </div>
+    <div
+      style="margin: auto; width: 20%"
+      v-for="project in this.$store.state.projects"
+      :key="project.id"
+    >
+      {{ project.name }} {{ getTime(project.sum) }}
     </div>
   </div>
 </template>
@@ -30,18 +35,20 @@ export default {
   },
   created() {
     this.updateTimeEntries();
-
-    console.log(this.getPreviousMonday());
   },
   methods: {
-    getHours(seconds) {
-      return (Math.round((seconds / 60 / 60) * 100) / 100).toFixed(2);
-    },
-    getMinutes(seconds) {
-      return (Math.round((seconds / 60) * 100) / 100).toFixed(2);
-    },
     getTime(seconds) {
-      return new Date(seconds * 1000).toISOString().substr(11, 8);
+      const d = Number(seconds);
+      const h = Math.floor(d / 3600);
+      const m = Math.floor((d % 3600) / 60);
+      const s = Math.floor((d % 3600) % 60);
+      const hDisplay =
+        h > 0 ? `${h.toString().length > 1 ? `${h}` : `${0}${h}`}` : "00";
+      const mDisplay =
+        m > 0 ? `${m.toString().length > 1 ? `${m}` : `${0}${m}`}` : "00";
+      const sDisplay =
+        s > 0 ? `${s.toString().length > 1 ? `${s}` : `${0}${s}`}` : "00";
+      return `${hDisplay}:${mDisplay}:${sDisplay}`;
     },
     getPreviousMonday() {
       var date = new Date();
@@ -59,18 +66,37 @@ export default {
       this.projects = [];
       this.goals = [];
       this.$store.state.projectGoals.forEach((goal) => {
-        console.log(
-          goal,
-          this.$store.state.projects.find((x) => x.name == goal.name)
-        );
-        let display = goal;
-        display.value = this.$store.state.projects.find(
+        let goalProj = this.$store.state.projects.find(
           (x) => x.name == goal.name
-        ).sum;
-
-        this.goals.push(display);
+        );
+        if (goalProj) {
+          let display = goal;
+          display.hex_color = goalProj.hex_color;
+          display.value = goalProj.sum;
+          this.goals.push(display);
+        }
       });
+      this.$store.state.entriesGoals.forEach((goal) => {
+        let goalEntries = [];
+        let goalSum = 0;
+        this.$store.state.timeEntries.forEach((entry) => {
+          if (entry.description == goal.name && entry.duration > 0) {
+            goalEntries.push(entry);
+            goalSum += entry.duration;
+          }
+        });
 
+        let goalProj = this.$store.state.projects.find(
+          (x) => x.id == goalEntries[0].pid
+        );
+        if (goalProj) {
+          let display = goal;
+          display.hex_color = goalProj.hex_color;
+          display.value = goalSum;
+
+          this.goals.push(display);
+        }
+      });
       this.$store.state.projects.forEach((proj) => {
         let display = proj;
         display.sum = 0;
@@ -113,7 +139,6 @@ export default {
         let uniqueProjects = [
           ...new Set(this.$store.state.timeEntries.map((item) => item.pid)),
         ];
-        console.log("uniques: ", uniqueProjects);
         uniqueProjects.forEach((entry) => {
           this.$toggl.getProjectData(entry, (err, projectData) => {
             if (err) {
