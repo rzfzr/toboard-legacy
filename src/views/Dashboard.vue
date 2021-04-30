@@ -24,7 +24,7 @@
     <v-hover
       v-slot:default="{ hover }"
       v-for="goal in this.goals"
-      :key="goal.name"
+      :key="goal.project"
     >
       <v-card
         :elevation="hover ? 12 : 2"
@@ -41,13 +41,14 @@
           height="50"
         >
           <div style="margin-right: 5%">
-            {{ goal.name }}
+            {{ goal.description }} {{ goal.project }}
           </div>
           <v-btn
             v-show="hover"
             fab
             small
             :color="colorShade(goal.hex_color, +40)"
+            @click="toggle(goal.description, goal.project)"
           >
             <v-icon dark v-if="goal.isRunning"> mdi-pause </v-icon>
             <v-icon dark v-else> mdi-play </v-icon>
@@ -84,6 +85,32 @@ export default {
     this.updateTimeEntries();
   },
   methods: {
+    toggle(description, project) {
+      this.$toggl.getCurrentTimeEntry(function (err, timeEntry) {
+        if (err) console.log(err);
+        else {
+          if (timeEntry) {
+            console.log("something already running ");
+            //check description
+          } else {
+            //just start
+            this.$toggl.startTimeEntry(
+              {
+                description: description,
+                project: project,
+              },
+              function (err, timeEntry) {
+                if (err) console.log(err);
+                else {
+                  //todo: add timentry to state
+                  console.log("succefully started: ", timeEntry);
+                }
+              }
+            );
+          }
+        }
+      });
+    },
     getProgress() {
       var date = new Date().toISOString();
       let mon = this.getPreviousMonday();
@@ -137,49 +164,40 @@ export default {
       prevMonday.setHours(0, 0, 0, 0);
       return prevMonday.toISOString();
     },
+
+    checkIfRunning(project) {
+      return (
+        this.$store.state.timeEntries.findIndex(
+          (x) => x.pid == project.id && x.duration < 0
+        ) != -1
+      );
+    },
+
+    getSumEntries(description) {
+      let goalEntries = [];
+      let goalSum = 0;
+      this.$store.state.timeEntries.forEach((entry) => {
+        if (entry.description == description && entry.duration > 0) {
+          goalEntries.push(entry);
+          goalSum += entry.duration;
+        }
+      });
+      return goalSum;
+    },
     setDisplay() {
       this.projects = [];
       this.goals = [];
-      this.$store.state.projectGoals.forEach((goal) => {
+      this.$store.state.goals.forEach((goal) => {
         let goalProj = this.$store.state.projects.find(
-          (x) => x.name == goal.name
-        );
-        if (goalProj) {
-          //check if project is current
-          if (
-            this.$store.state.timeEntries.findIndex(
-              (x) => x.pid == goalProj.id && x.duration < 0
-            ) != -1
-          ) {
-            goal.isRunning = true;
-          } else {
-            goal.isRunning = false;
-          }
-
-          let display = goal;
-          display.hex_color = goalProj.hex_color;
-          display.value = goalProj.sum;
-          this.goals.push(display);
-        }
-      });
-      this.$store.state.entriesGoals.forEach((goal) => {
-        let goalEntries = [];
-        let goalSum = 0;
-        this.$store.state.timeEntries.forEach((entry) => {
-          if (entry.description == goal.name && entry.duration > 0) {
-            goalEntries.push(entry);
-            goalSum += entry.duration;
-          }
-        });
-
-        let goalProj = this.$store.state.projects.find(
-          (x) => x.id == goalEntries[0].pid
+          (x) => x.name == goal.project
         );
         if (goalProj) {
           let display = goal;
           display.hex_color = goalProj.hex_color;
-          display.value = goalSum;
-
+          display.isRunning = this.checkIfRunning(goalProj);
+          display.value = goal.description
+            ? this.getSumEntries(goal.description)
+            : goalProj.sum;
           this.goals.push(display);
         }
       });

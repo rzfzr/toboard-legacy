@@ -7,18 +7,18 @@ export default new Vuex.Store({
   state: {
     projects: [],
     timeEntries: [],
-    projectGoals: [{
-      name: "Exercise",
+    goals: [{
+      project: "Exercise",
       min: (2 * 60 * 60)
     }, {
-      name: "ClicNet",
+      project: "ClicNet",
       min: (40 * 60 * 60)
     }, {
-      name: "Masters",
+      project: "Masters",
       min: (10 * 60 * 60)
-    }],
-    entriesGoals: [{
-      name: "Reading",
+    }, {
+      project: "Personal",
+      description: "Reading",
       min: (2 * 60 * 60)
     }],
   },
