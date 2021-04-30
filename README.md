@@ -12,7 +12,6 @@ Using https://www.npmjs.com/package/toggl-api
 
 ![dashboard](https://github.com/rzfzr/toboard/blob/main/screenshots/dashboard.png)
 
-
 ## Instructions
 
 Just create a .env.local in the project root dir, with VUE_APP_TOGGL_API=YOUR-API-KEY
@@ -20,3 +19,21 @@ Just create a .env.local in the project root dir, with VUE_APP_TOGGL_API=YOUR-AP
 You can get your key from https://track.toggl.com/profile
 
 Then npm run serve
+
+## Todo
+List of planned features
+### Functional
+- [ ] Use tags
+- [ ] Add cronological page
+- [ ] Add favorites page
+- [ ] Add calendar page
+- [ ] Add timeline page
+- [ ] Add day page
+- [ ] Add month page
+- [ ] Add year page
+### Quality of Life
+- [ ] Edit goals in the settings
+- [ ] Change favorite subpage
+### Visual
+- [ ] Center play/pause button
+- [ ] Ilustrate >100% goals
