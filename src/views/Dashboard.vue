@@ -1,32 +1,11 @@
 <template>
   <div>
-    <v-hover v-slot:default="{ hover }">
-      <v-card
-        :elevation="hover ? 12 : 2"
-        class="mx-auto"
-        height="50"
-        max-width="550"
-        color="dark"
-      >
-        <v-progress-linear
-          :value="(100 / 168) * getWeekProgress()"
-          color="grey"
-          height="50"
-        >
-          <div style="margin-right: 5%">Week Progress</div>
-          {{ getWeekProgress().toFixed() }} / {{ 168 }} ({{
-            ((100 / 168) * getWeekProgress()).toFixed(2)
-          }}%)
-        </v-progress-linear>
-      </v-card>
-    </v-hover>
-
+    <my-progress />
     <goal
       v-for="goal in this.goals"
       :key="goal.project + goal.description"
       v-bind:goal="goal"
     />
-
     <div
       style="margin: auto; width: 20%"
       v-for="project in this.$store.state.projects"
@@ -38,6 +17,7 @@
 </template>
 <script>
 import Goal from "../components/Goal.vue";
+import MyProgress from "../components/Progress.vue";
 import datesMixin from "../mixins/dates";
 import togglMixin from "../mixins/toggl";
 
@@ -46,6 +26,7 @@ export default {
   mixins: [datesMixin, togglMixin],
   components: {
     Goal,
+    MyProgress,
   },
   data() {
     return {

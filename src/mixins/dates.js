@@ -14,11 +14,6 @@ export default {
             if (showSeconds) return `${hDisplay}:${mDisplay}:${sDisplay}`;
             else return `${hDisplay}:${mDisplay}`;
         },
-        getWeekProgress() {
-            var date = new Date().toISOString();
-            let mon = this.getPreviousMonday();
-            return Math.abs(Date.parse(date) - Date.parse(mon)) / 36e5;
-        },
         getPreviousMonday() {
             var date = new Date();
             var day = date.getDay();
