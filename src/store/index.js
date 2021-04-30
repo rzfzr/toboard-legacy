@@ -27,7 +27,7 @@ export default new Vuex.Store({
     }, {
       project: "ClicNet",
       description: "AThingADay",
-      min: (3 * 60 * 60),
+      min: (10 * 60 * 60),
       isRunning: false,
     }, {
       project: "ClicNet",
@@ -48,13 +48,22 @@ export default new Vuex.Store({
       state.timeEntries.push(payload);
     },
     setRunningEntry(state, payload) {
+      state.goals = state.goals.map(g => {
+        g.isRunning = false
+        return g
+      })
       state.runningEntry = payload;
       let goals = state.goals
-      goals[goals.findIndex(x => x.description == payload.description && x.pid == payload.pid)].isRunning = true
-      console.log('new list', goals, 'i ', goals.findIndex(x => x.description == payload.description && x.pid == payload.pid))
+      if (!payload) return
+      let fullMatchIndex = goals.findIndex(x => x.description == payload.description && x.pid == payload.pid)
+      let projMatchIndex = goals.findIndex(x => !x.description && x.pid == payload.pid)
+
+      if (fullMatchIndex != -1)
+        goals[fullMatchIndex].isRunning = true
+      else if (projMatchIndex != -1)
+        goals[projMatchIndex].isRunning = true
       state.goals = goals
     },
-
     setGoals(state, payload) {
       state.goals = payload
     }

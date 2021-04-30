@@ -73,8 +73,6 @@ export default {
 
           display.hex_color = goalProj.hex_color;
           display.pid = goalProj.id;
-
-          console.log(goalProj.name, this.$store.state.runningEntry.project);
           // display.isRunning =
           //   goalProj.name == this.$store.state.runningEntry.project;
           display.value = goal.description
