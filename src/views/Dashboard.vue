@@ -70,15 +70,21 @@ export default {
         );
         if (goalProj) {
           let display = goal;
+
           display.hex_color = goalProj.hex_color;
-          display.isRunning =
-            goalProj.name == this.$store.state.runningEntry.project;
+          display.pid = goalProj.id;
+
+          console.log(goalProj.name, this.$store.state.runningEntry.project);
+          // display.isRunning =
+          //   goalProj.name == this.$store.state.runningEntry.project;
           display.value = goal.description
             ? this.getSumEntries(goal.description)
             : goalProj.sum;
           this.goals.push(display);
         }
       });
+      if (this.goals.length == this.$store.state.goals.length)
+        this.$store.commit("setGoals", this.goals);
     },
     updateTimeEntries() {
       if (this.$store.state.timeEntries.length == 0) {
@@ -92,9 +98,14 @@ export default {
               console.log("error: ", err);
             } else {
               this.$store.commit("setTimeEntries", timeEntries);
+
+              console.log(
+                "running",
+                this.$store.state.timeEntries.find((x) => x.duration < 0)
+              );
               this.$store.commit(
                 "setRunningEntry",
-                timeEntries.find((x) => x.duration < 0)
+                this.$store.state.timeEntries.find((x) => x.duration < 0)
               );
               this.updateProjects();
             }
@@ -103,6 +114,15 @@ export default {
       } else {
         console.log("not getting timeEntries");
         this.updateProjects();
+
+        console.log(
+          "running",
+          this.$store.state.timeEntries.find((x) => x.duration < 0)
+        );
+        this.$store.commit(
+          "setRunningEntry",
+          this.$store.state.timeEntries.find((x) => x.duration < 0)
+        );
       }
     },
     updateProjects() {

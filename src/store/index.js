@@ -9,21 +9,32 @@ export default new Vuex.Store({
     runningEntry: {},
     goals: [{
       project: "Exercise",
-      min: (2 * 60 * 60)
+      min: (2 * 60 * 60),
+      isRunning: false,
     }, {
       project: "ClicNet",
-      min: (60 * 60 * 60)
+      min: (60 * 60 * 60),
+      isRunning: false,
     }, {
       project: "Masters",
-      min: (10 * 60 * 60)
+      min: (10 * 60 * 60),
+      isRunning: false,
     }, {
       project: "Personal",
       description: "Reading",
-      min: (2 * 60 * 60)
+      min: (2 * 60 * 60),
+      isRunning: false,
     }, {
       project: "ClicNet",
       description: "AThingADay",
-      min: (3 * 60 * 60)
+      min: (3 * 60 * 60),
+      isRunning: false,
+    }, {
+      project: "ClicNet",
+      pid: 158359448,
+      description: "toboard",
+      min: (20 * 60 * 60),
+      isRunning: false,
     }],
   },
   mutations: {
@@ -38,7 +49,15 @@ export default new Vuex.Store({
     },
     setRunningEntry(state, payload) {
       state.runningEntry = payload;
+      let goals = state.goals
+      goals[goals.findIndex(x => x.description == payload.description && x.pid == payload.pid)].isRunning = true
+      console.log('new list', goals, 'i ', goals.findIndex(x => x.description == payload.description && x.pid == payload.pid))
+      state.goals = goals
     },
+
+    setGoals(state, payload) {
+      state.goals = payload
+    }
   },
   actions: {},
   modules: {}
