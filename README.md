@@ -15,7 +15,7 @@ Using https://www.npmjs.com/package/toggl-api
 
 ## Instructions
 
-Just create a .env.local in the project root dir, with VUE_APP_TOGGL_API=<<<YOUR-API-KEY>>>
+Just create a .env.local in the project root dir, with VUE_APP_TOGGL_API=YOUR-API-KEY
 
 You can get your key from https://track.toggl.com/profile
 
