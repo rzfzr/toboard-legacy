@@ -2,11 +2,11 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 Vue.use(Vuex)
-
 export default new Vuex.Store({
   state: {
     projects: [],
     timeEntries: [],
+    runningEntry: {},
     goals: [{
       project: "Exercise",
       min: (2 * 60 * 60)
@@ -32,6 +32,12 @@ export default new Vuex.Store({
     },
     addProject(state, payload) {
       state.projects.push(payload);
+    },
+    addTimeEntry(state, payload) {
+      state.timeEntries.push(payload);
+    },
+    setRunningEntry(state, payload) {
+      state.runningEntry = payload;
     },
   },
   actions: {},

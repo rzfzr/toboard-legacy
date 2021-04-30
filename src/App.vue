@@ -9,6 +9,11 @@
     </v-app-bar>
 
     <v-main>
+      <v-tabs class="tabs" centered grow height="60px" v-model="activeTab">
+        <v-tab v-for="tab in tabs" :key="tab.route" :to="tab.route" exact>
+          {{ tab.name }}
+        </v-tab>
+      </v-tabs>
       <router-view />
     </v-main>
   </v-app>
@@ -16,6 +21,15 @@
 
 <script>
 export default {
+  data() {
+    return {
+      activeTab: `/user/${this.id}`,
+      tabs: [
+        { name: "Home", route: `/home` },
+        { name: "Weekly", route: `/Dashboard` },
+      ],
+    };
+  },
   mounted() {
     this.$router.push("/Dashboard").catch(() => {});
   },
