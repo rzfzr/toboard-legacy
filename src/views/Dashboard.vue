@@ -85,29 +85,38 @@ export default {
     this.updateTimeEntries();
   },
   methods: {
+    createEntry(description, project) {
+      this.$toggl.startTimeEntry(
+        {
+          description: description,
+          pid: this.$store.state.projects.find((x) => x.name == project).id,
+        },
+        (err, timeEntry) => {
+          if (err) console.log(err);
+          else {
+            console.log("succefully started: ", timeEntry);
+            this.$store.state.timeEntries.push(timeEntry);
+          }
+        }
+      );
+    },
+
     toggle(description, project) {
       this.$toggl.getCurrentTimeEntry((err, timeEntry) => {
         if (err) console.log(err);
         else {
           if (timeEntry) {
             console.log("something already running ");
-            //check description
-          } else {
-            //just start
-            this.$toggl.startTimeEntry(
-              {
-                description: description,
-                pid: this.$store.state.projects.find((x) => x.name == project)
-                  .id,
-              },
-              function (err, timeEntry) {
+            if (timeEntry.description == description) {
+              this.$toggl.stopTimeEntry(timeEntry.id, (err, timeEntry) => {
                 if (err) console.log(err);
-                else {
-                  //todo: add timentry to state
-                  console.log("succefully started: ", timeEntry);
-                }
-              }
-            );
+                else console.log("succefully stopped ", timeEntry);
+              });
+            } else {
+              this.createEntry(description, project);
+            }
+          } else {
+            this.createEntry(description, project);
           }
         }
       });

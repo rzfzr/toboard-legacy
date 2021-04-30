@@ -20,6 +20,10 @@ export default new Vuex.Store({
       project: "Personal",
       description: "Reading",
       min: (2 * 60 * 60)
+    }, {
+      project: "AThingADay",
+      description: "ClicNet",
+      min: (0.5 * 60 * 60)
     }],
   },
   mutations: {
