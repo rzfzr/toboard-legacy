@@ -152,3 +152,16 @@ export default {
   },
 };
 </script>
+<style>
+.v-progress-linear__stream {
+  -webkit-animation: stream-ltr 0.5s linear infinite;
+  animation: stream-ltr 0.5s linear infinite;
+  border-top: 8px dotted;
+}
+
+@keyframes stream-ltr {
+  100% {
+    transform: translateX(-16px);
+  }
+}
+</style>
