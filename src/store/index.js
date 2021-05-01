@@ -65,7 +65,7 @@ export default new Vuex.Store({
       if (!payload) return
       let fullMatchIndex = goals.findIndex(x => x.description == payload.description && x.pid == payload.pid)
       let projMatchIndex = goals.findIndex(x => !x.description && x.pid == payload.pid)
-      console.log('full', fullMatchIndex, projMatchIndex);
+      // console.log('full', fullMatchIndex, projMatchIndex);
       if (fullMatchIndex != -1)
         goals[fullMatchIndex].isRunning = true
       if (projMatchIndex != -1)

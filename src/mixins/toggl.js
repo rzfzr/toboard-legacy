@@ -42,5 +42,8 @@ export default {
                 }
             });
         },
+        getProject(entry) {
+            return this.$store.state.projects.find(p => p.id == entry.pid)
+        }
     }
 };

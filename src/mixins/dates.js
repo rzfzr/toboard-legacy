@@ -14,6 +14,7 @@ export default {
             if (showSeconds) return `${hDisplay}:${mDisplay}:${sDisplay}`;
             else return `${hDisplay}:${mDisplay}`;
         },
+
         getPreviousMonday() {
             var date = new Date();
             var day = date.getDay();
@@ -26,5 +27,17 @@ export default {
             prevMonday.setHours(0, 0, 0, 0);
             return prevMonday.toISOString();
         },
+
+        formatDate(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate();
+            // year = d.getFullYear();
+            if (month.length < 2)
+                month = '0' + month;
+            if (day.length < 2)
+                day = '0' + day;
+            return [day, month].join('/');
+        }
     },
 };

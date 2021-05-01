@@ -50,6 +50,8 @@ export default {
       activeTab: `/user/`,
       tabs: [
         { name: "Home", route: `/home` },
+        { name: "List", route: `/list` },
+        { name: "Timeline", route: `/timeline` },
         // { name: "Daily", route: `/dashboard` },
         { name: "Weekly", route: `/dashboard` },
         // { name: "Monthly", route: `/dashboard` },
