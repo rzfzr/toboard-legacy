@@ -1,35 +1,42 @@
 <template>
   <div class="about">
-    <v-row justify="center" style="width: 340px" class="mx-auto">
+    <v-row justify="center" style="max-width: 400px" class="mx-auto">
       <v-expansion-panels accordion multiple v-model="panel">
         <v-expansion-panel v-for="day in this.days" :key="day.label">
           <v-expansion-panel-header>{{ day.label }}</v-expansion-panel-header>
           <v-expansion-panel-content>
-            <v-card
+            <v-hover
+              v-slot:default="{ hover }"
               class="mx-auto"
               max-width="340"
-              elevation="24"
               outlined
               v-for="entry in day.entries"
               :key="entry.id"
               style="margin-top: 5px"
             >
-              <v-list-item three-line>
-                <v-list-item-content>
-                  <v-list-item-title class="headline mb-1"
-                    >{{ entry.description }}
-                  </v-list-item-title>
-                  <v-list-item-subtitle
-                    :style="{ color: getProject(entry).hex_color }"
-                  >
-                    {{ getProject(entry).name }}
-                  </v-list-item-subtitle>
-                </v-list-item-content>
-                <v-list-item-avatar>
-                  {{ getTime(entry.duration) }}</v-list-item-avatar
-                >
-              </v-list-item>
-            </v-card>
+              <v-card :elevation="hover ? 24 : 4">
+                <v-list-item three-line>
+                  <v-list-item-content>
+                    <v-list-item-title class="headline mb-1"
+                      >{{ entry.description }}
+                    </v-list-item-title>
+                    <v-list-item-subtitle
+                      :style="{ color: getProject(entry).hex_color }"
+                    >
+                      {{ getProject(entry).name }}
+                    </v-list-item-subtitle>
+                  </v-list-item-content>
+                  <toggle-button
+                    :entry="entry"
+                    :project="getProject(entry)"
+                    v-show="hover"
+                  />
+                  <v-list-item-avatar>
+                    {{ getTime(entry.duration) }}
+                  </v-list-item-avatar>
+                </v-list-item>
+              </v-card>
+            </v-hover>
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
@@ -38,11 +45,15 @@
 </template>
 
 <script>
+import ToggleButton from "../components/ToggleButton";
 import datesMixin from "../mixins/dates";
 import togglMixin from "../mixins/toggl";
 export default {
   name: "List",
   mixins: [datesMixin, togglMixin],
+  components: {
+    ToggleButton,
+  },
   data() {
     return {
       days: [],
@@ -50,20 +61,22 @@ export default {
     };
   },
   created() {
-    this.$store.state.timeEntries.forEach((entry) => {
+    let timeEntries = this.$store.state.timeEntries.sort((a, b) =>
+      a.start < b.start ? 1 : -1
+    );
+
+    timeEntries.forEach((entry) => {
       var entryDate = this.formatDate(new Date(entry.start));
       let day = this.days.find((d) => d.label == entryDate);
       if (!day) {
         this.days.push({ label: entryDate });
         day = this.days.find((d) => d.label == entryDate);
       }
-
       if (!day.entries) day.entries = [];
-
       day.entries.push(entry);
-
-      // let day = date.getDay() + "/" + date.getMonth();
     });
+
+    this.days.sort();
     console.log(this.days);
   },
 };

@@ -1,9 +1,10 @@
 export default {
     methods: {
         createEntry(description, project) {
+            console.log("Creating: " + description, project);
             this.$toggl.startTimeEntry({
                     description: description,
-                    pid: this.$store.state.projects.find((x) => x.name == project).id,
+                    pid: project.id,
                 },
                 (err, timeEntry) => {
                     if (err) console.log(err);
@@ -16,6 +17,7 @@ export default {
             );
         },
         stopEntry(id) {
+            console.log("Stopping: " + id);
             this.$toggl.stopTimeEntry(id, (err, timeEntry) => {
                 if (err) console.log(err);
                 else {
@@ -29,9 +31,10 @@ export default {
                 if (err) console.log(err);
                 else {
                     if (timeEntry) {
-                        console.log("something already running ");
+                        console.log("something already running: ", timeEntry);
+                        console.log("trying with: ", description, project);
                         if (timeEntry.description == description &&
-                            timeEntry.pid == this.$store.state.projects.find((x) => x.name == project).id) {
+                            timeEntry.pid == project.id) {
                             this.stopEntry(timeEntry.id)
                         } else {
                             this.createEntry(description, project);
