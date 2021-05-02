@@ -26,6 +26,14 @@
                       {{ getProject(entry).name }}
                     </v-list-item-subtitle>
                   </v-list-item-content>
+
+                  <v-progress-circular
+                    indeterminate
+                    :size="40"
+                    :color="getProject(entry).hex_color"
+                    v-show="entry.duration < 0 && !hover"
+                  ></v-progress-circular>
+
                   <toggle-button
                     :entry="entry"
                     :project="getProject(entry)"

@@ -5,7 +5,9 @@
     :color="colorShade(entry.hex_color || project.hex_color, +40)"
     @click="toggle(entry.description, entry.project || project)"
   >
-    <v-icon dark v-if="entry.isRunning"> mdi-pause </v-icon>
+    <v-icon dark v-if="entry.isRunning || entry.duration < 0">
+      mdi-pause
+    </v-icon>
     <v-icon dark v-else> mdi-play </v-icon>
   </v-btn>
 </template>
