@@ -15,6 +15,16 @@ export default {
             else return `${hDisplay}:${mDisplay}`;
         },
 
+        getCalendarFormat(date) {
+            console.log(date)
+            var yyyy = date.getFullYear();
+            var mm = date.getMonth() + 1;
+            var dd = date.getDate();
+            let h = date.getHours();
+            let m = date.getMinutes();
+            return String((yyyy) + '-' + (mm) + '-' + dd + ' ' + h + ':' + m);
+        },
+
         getPreviousMonday() {
             var date = new Date();
             var day = date.getDay();

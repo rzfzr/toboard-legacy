@@ -24,13 +24,8 @@ Then npm run serve
 List of planned features
 ### Functional
 - [ ] Use tags
-- [ ] Add cronological page
 - [ ] Add favorites page
-- [ ] Add calendar page
-- [ ] Add timeline page
-- [ ] Add day page
-- [ ] Add month page
-- [ ] Add year page
+- [x] Add calendar page
 ### Quality of Life
 - [ ] Edit goals in the settings
 - [ ] Change favorite subpage
