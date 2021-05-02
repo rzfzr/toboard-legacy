@@ -26,7 +26,7 @@ export default new Vuex.Store({
       {
         project: "ClicNet",
         pid: 158359448,
-        min: (60 * 60 * 60),
+        min: (80 * 60 * 60),
         isRunning: false,
       },
       {
