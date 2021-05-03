@@ -68,18 +68,17 @@ export default {
         let goalProj = this.$store.state.projects.find(
           (x) => x.name == goal.project
         );
-        if (goalProj) {
-          let display = goal;
 
-          display.hex_color = goalProj.hex_color;
-          display.pid = goalProj.id;
-          // display.isRunning =
-          //   goalProj.name == this.$store.state.runningEntry.project;
-          display.value = goal.description
-            ? this.getSumEntries(goal.description)
-            : goalProj.sum;
-          this.goals.push(display);
-        }
+        let display = goal;
+        display.hex_color = goalProj ? goalProj.hex_color : "#808080";
+        // display.isRunning =
+        //   goalProj.name == this.$store.state.runningEntry.project;
+        display.value = goal.description
+          ? this.getSumEntries(goal.description)
+          : goalProj
+          ? goalProj.sum
+          : 0;
+        this.goals.push(display);
       });
       if (this.goals.length == this.$store.state.goals.length)
         this.$store.commit("setGoals", this.goals);
