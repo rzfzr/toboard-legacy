@@ -1,5 +1,5 @@
 <template>
-  <v-hover v-slot:default="{ hover }">
+  <v-hover v-slot:default="{ hover }" style="margin-top: 5px">
     <v-card
       :elevation="hover ? 12 : 2"
       class="mx-auto"

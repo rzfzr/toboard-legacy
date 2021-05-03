@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="margin-left: 20px; margin-right: 20px">
     <my-progress />
     <goal
       v-for="goal in this.goals"
