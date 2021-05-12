@@ -2,12 +2,12 @@
   <v-app>
     <div style="height: 50px">
       <v-hover v-slot="{ hover }">
-        <v-app-bar app color="#2C1338" dark>
+        <v-app-bar app color="#333333">
           <div
             v-if="!hover"
             class="text-center"
             style="
-              color: #dd6fd1;
+              color: #6a53f9;
               font-weight: 900;
               font-size: 40px;
               width: 100%;
@@ -21,8 +21,8 @@
             centered
             grow
             v-model="activeTab"
-            color="#dd6fd1"
-            background-color="#2C1338"
+            color="#6a53f9"
+            background-color="#333333"
           >
             <v-tab v-for="tab in tabs" :key="tab.route" :to="tab.route" exact>
               {{ tab.name }}
