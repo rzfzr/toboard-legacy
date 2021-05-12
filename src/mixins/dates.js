@@ -1,6 +1,6 @@
 export default {
     methods: {
-        getTime(seconds, showSeconds = false) {
+        getTime(seconds, returnSeconds = false) {
             const d = Number(seconds);
             const h = Math.floor(d / 3600);
             const m = Math.floor((d % 3600) / 60);
@@ -10,13 +10,13 @@ export default {
             const mDisplay =
                 m > 0 ? `${m.toString().length > 1 ? `${m}` : `${0}${m}`}` : "00";
             const sDisplay =
-                s > 0 ? `${s.toString().length > 1 ? `${s}` : `${0}${s}`}` : "00";
-            if (showSeconds) return `${hDisplay}:${mDisplay}:${sDisplay}`;
+                s > 0 ? `${s.toString().length>1? `${s}`:`${0}${s}`}` : "00";
+
+            if (returnSeconds) return `${hDisplay}:${mDisplay}:${sDisplay}`;
             else return `${hDisplay}:${mDisplay}`;
         },
 
         getCalendarFormat(date) {
-            console.log(date)
             var yyyy = date.getFullYear();
             var mm = date.getMonth() + 1;
             var dd = date.getDate();
@@ -38,16 +38,19 @@ export default {
             return prevMonday.toISOString();
         },
 
-        formatDate(date) {
+        formatDate(date, returnYear) {
             var d = new Date(date),
                 month = '' + (d.getMonth() + 1),
-                day = '' + d.getDate();
-            // year = d.getFullYear();
+                day = '' + d.getDate(),
+                year = d.getFullYear();
             if (month.length < 2)
                 month = '0' + month;
             if (day.length < 2)
                 day = '0' + day;
-            return [day, month].join('/');
+
+            if (returnYear)
+                return [day, month, year].join('/');
+            else return [day, month].join('/');
         }
     },
 };
