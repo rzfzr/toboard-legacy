@@ -50,9 +50,11 @@ export default new Vuex.Store({
   },
   mutations: {
     setTimeEntries(state, payload) {
+      console.log('setting mutation', payload);
       state.timeEntries = payload;
     },
     addProject(state, payload) {
+      console.log('adding project: ', payload);
       state.projects.push(payload);
     },
     addTimeEntry(state, payload) {
@@ -78,7 +80,18 @@ export default new Vuex.Store({
       state.goals = payload
     }
   },
-  actions: {},
+  actions: {
+    async setTimeEntries({
+      commit
+    }, timeEntries) {
+      console.log('setting action', timeEntries);
+      if (this.state.projects.length == 0) console.log('no projects found!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+
+
+
+      commit('setTimeEntries', timeEntries)
+    },
+  },
   modules: {},
   getters: {
     // projects: state => {

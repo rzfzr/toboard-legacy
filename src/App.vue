@@ -70,41 +70,44 @@ export default {
   async created() {
     console.log("created app");
     await this.updateTimeEntries();
-    await this.updateProjects();
-    await this.setGoals();
-    await this.setProjects();
     console.log("fininhed creating app");
     // this.$router.push("/weekly").catch(() => {});
   },
   methods: {
     async updateTimeEntries() {
       console.log("updatingTimeEntries");
-      var today = new Date();
-      this.$toggl.getTimeEntries(
+
+      await this.$toggl.getTimeEntries(
         this.getPreviousMonday(),
-        today.toISOString(),
-        (err, timeEntries) => {
+        new Date().toISOString(),
+        async (err, timeEntries) => {
           if (err) {
             console.log("error: ", err);
           } else {
-            this.$store.commit("setTimeEntries", timeEntries);
-
+            await this.$store.dispatch("setTimeEntries", timeEntries);
+            console.log("after action");
             let running = this.$store.state.timeEntries.find(
               (x) => x.duration < 0
             );
             this.$store.commit("setRunningEntry", running);
+            console.log(
+              "finished updatingTimeEntries: ",
+              this.$store.state.timeEntries
+            );
+            await this.updateProjects();
+            await this.setGoals();
+            await this.setProjects();
           }
         }
       );
     },
     async updateProjects() {
-      console.log("updatingProjects");
       let uniqueProjects = [
         ...new Set(this.$store.state.timeEntries.map((item) => item.pid)),
       ];
+      console.log("updatingProjects", uniqueProjects);
       uniqueProjects.forEach((entry) => {
         this.$toggl.getProjectData(entry, (err, projectData) => {
-          console.log(err, projectData);
           if (err) {
             console.log("error: ", err);
           } else {
