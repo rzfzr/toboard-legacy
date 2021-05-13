@@ -50,6 +50,17 @@ export default {
         },
         getProject(entry) {
             return this.$store.state.projects.find(p => p.id == entry.pid)
+        },
+        getSumEntries(entryDescription) {
+            let goalEntries = [];
+            let goalSum = 0;
+            this.$store.state.timeEntries.forEach((entry) => {
+                if (entry.description == entryDescription && entry.duration > 0) {
+                    goalEntries.push(entry);
+                    goalSum += entry.duration;
+                }
+            });
+            return goalSum;
         }
     }
 };

@@ -78,7 +78,9 @@ export default {
   components: {
     ToggleButton,
   },
-  created() {
+  mounted() {
+    // while (this.$store.state.projects.length == 0) {}
+    console.log("starting favorites: ", this.$store.state.projects);
     this.items.forEach((i) => {
       let project = this.$store.state.projects.find(
         (element) => element.name == i.project

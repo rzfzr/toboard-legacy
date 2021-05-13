@@ -8,6 +8,7 @@
       color="dark"
     >
       <v-progress-linear
+        title="title"
         :value="(100 / goal.min) * goal.value"
         :color="goal.hex_color"
         :stream="goal.isRunning"

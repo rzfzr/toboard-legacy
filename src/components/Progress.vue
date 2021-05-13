@@ -8,6 +8,7 @@
       color="dark"
     >
       <v-progress-linear
+        title="progress"
         :value="(100 / 168) * getWeekProgress()"
         color="grey"
         height="50"

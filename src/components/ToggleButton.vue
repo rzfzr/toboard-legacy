@@ -1,5 +1,6 @@
 <template>
   <v-btn
+    :title="'Toggl' + entry.description"
     fab
     small
     :color="colorShade(entry.hex_color || project.hex_color, +40)"
