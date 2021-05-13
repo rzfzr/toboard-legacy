@@ -1,10 +1,10 @@
 export default {
     methods: {
-        createEntry(description, project) {
-            console.log("Creating: " + description, project);
+        createEntry(entryDescription, projectID) {
+            console.log("Creating: " + entryDescription, projectID);
             this.$toggl.startTimeEntry({
-                    description: description,
-                    pid: project.id,
+                    description: entryDescription,
+                    pid: projectID,
                 },
                 (err, timeEntry) => {
                     if (err) console.log(err);
@@ -16,9 +16,9 @@ export default {
                 }
             );
         },
-        stopEntry(id) {
-            console.log("Stopping: " + id);
-            this.$toggl.stopTimeEntry(id, (err, timeEntry) => {
+        stopEntry(entryID) {
+            console.log("Stopping: " + entryID);
+            this.$toggl.stopTimeEntry(entryID, (err, timeEntry) => {
                 if (err) console.log(err);
                 else {
                     console.log("succefully stopped ", timeEntry);
@@ -26,21 +26,24 @@ export default {
                 }
             });
         },
-        toggle(description, project) {
+        toggle(entryDescription, projectID) {
+            console.log('Togglying: ', entryDescription, projectID);
             this.$toggl.getCurrentTimeEntry((err, timeEntry) => {
                 if (err) console.log(err);
                 else {
                     if (timeEntry) {
-                        console.log("something already running: ", timeEntry);
-                        console.log("trying with: ", description, project);
-                        if (timeEntry.description == description &&
-                            timeEntry.pid == project.id) {
+                        console.log("Something already running: ", timeEntry.description, timeEntry.pid);
+                        console.log("Checking if it is:", entryDescription, projectID);
+                        if (timeEntry.pid == projectID && timeEntry.description == entryDescription) {
+                            console.log('Matched! Stopping');
                             this.stopEntry(timeEntry.id)
                         } else {
-                            this.createEntry(description, project);
+                            console.log('Not Matched! Starting new');
+                            this.createEntry(entryDescription, projectID);
                         }
                     } else {
-                        this.createEntry(description, project);
+                        console.log("Nothing running! Starting new");
+                        this.createEntry(entryDescription, projectID);
                     }
                 }
             });

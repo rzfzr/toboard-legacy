@@ -3,7 +3,7 @@
     fab
     small
     :color="colorShade(entry.hex_color || project.hex_color, +40)"
-    @click="toggle(entry.description, entry.project || project)"
+    @click="toggle(entry.description, entry.pid || project.id)"
   >
     <v-icon dark v-if="entry.isRunning || entry.duration < 0">
       mdi-pause
@@ -33,6 +33,9 @@ export default {
       },
     },
   },
+  // created: function () {
+  //   console.log("entry:", this.entry, "project:", this.project);
+  // },
   methods: {
     colorShade(col, amt) {
       col = col.replace(/^#/, "");
