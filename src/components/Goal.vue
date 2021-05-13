@@ -20,7 +20,7 @@
         <toggle-button :entry="goal" v-show="hover" />
         <div style="margin-left: 5%">
           {{ getTime(goal.value) }} / {{ getTime(goal.min) }} ({{
-            ((100 / goal.min) * goal.value).toFixed(2)
+            ((100 / goal.min) * goal.value || 0).toFixed(2)
           }}%)
         </div>
       </v-progress-linear>
@@ -39,11 +39,10 @@ export default {
   components: {
     ToggleButton,
   },
-  data: () => ({}),
   props: {
     goal: {
       type: Object,
-      default: function () {
+      default: () => {
         return {};
       },
     },
