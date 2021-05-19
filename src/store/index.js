@@ -29,21 +29,31 @@ export default new Vuex.Store({
       {
         project: "ClicNet",
         pid: 158359448,
-        min: (80 * 60 * 60),
+        min: (40 * 60 * 60),
         isRunning: false,
       },
       {
         project: "ClicNet",
         pid: 158359448,
         description: "AThingADay",
-        min: (3 * 60 * 60),
+        min: (2 * 60 * 60),
         isRunning: false,
-      },
-      {
+      }, {
         project: "ClicNet",
         pid: 158359448,
         description: "toboard",
-        min: (5 * 60 * 60),
+        min: (3 * 60 * 60),
+        isRunning: false,
+      }, {
+        project: "ClicNet",
+        pid: 158359448,
+        description: "SmartPet",
+        min: (8 * 60 * 60),
+        isRunning: false,
+      }, {
+        project: "DMM",
+        pid: 169830790,
+        min: (20 * 60 * 60),
         isRunning: false,
       },
     ],
@@ -54,7 +64,7 @@ export default new Vuex.Store({
       state.timeEntries = payload;
     },
     addProject(state, payload) {
-      console.log('adding project: ', payload);
+      // console.log('adding project: ', payload);
       state.projects.push(payload);
     },
     addTimeEntry(state, payload) {
@@ -84,18 +94,10 @@ export default new Vuex.Store({
     async setTimeEntries({
       commit
     }, timeEntries) {
-      console.log('setting action', timeEntries);
       if (this.state.projects.length == 0) console.log('no projects found!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-
-
-
       commit('setTimeEntries', timeEntries)
     },
   },
   modules: {},
-  getters: {
-    // projects: state => {
-    //   return state.projects;
-    // }
-  }
+  getters: {}
 })

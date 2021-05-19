@@ -50,7 +50,6 @@ export default {
   mixins: [datesMixin, togglMixin],
   data() {
     return {
-      goals: [],
       projects: [],
       showTabs: false,
       activeTab: `/user/`,
@@ -85,18 +84,11 @@ export default {
             console.log("error: ", err);
           } else {
             await this.$store.dispatch("setTimeEntries", timeEntries);
-            console.log("after action");
             let running = this.$store.state.timeEntries.find(
               (x) => x.duration < 0
             );
             this.$store.commit("setRunningEntry", running);
-            console.log(
-              "finished updatingTimeEntries: ",
-              this.$store.state.timeEntries
-            );
             await this.updateProjects();
-            await this.setGoals();
-            await this.setProjects();
           }
         }
       );
@@ -111,18 +103,14 @@ export default {
           if (err) {
             console.log("error: ", err);
           } else {
+            projectData.sum = 0;
+            this.$store.state.timeEntries.forEach((entry) => {
+              if (entry.pid == projectData.id) {
+                if (entry.duration > 0) projectData.sum += entry.duration;
+              }
+            });
             this.$store.commit("addProject", projectData);
-          }
-        });
-      });
-    },
-    async setProjects() {
-      console.log("settingProjects");
-      this.$store.state.projects.forEach((proj) => {
-        proj.sum = 0;
-        this.$store.state.timeEntries.forEach((entry) => {
-          if (entry.pid == proj.id) {
-            if (entry.duration > 0) proj.sum += entry.duration;
+            this.setGoals();
           }
         });
       });
@@ -130,18 +118,19 @@ export default {
     async setGoals() {
       console.log("settingGoals");
       this.$store.state.goals.forEach((goal) => {
-        let goalProj = this.$store.state.projects.find(
-          (x) => x.name == goal.project
-        );
+        let goalProj = this.$store.state.projects.find((x) => x.id == goal.pid);
         goal.hex_color = goalProj ? goalProj.hex_color : "#808080";
         goal.value = goal.description
           ? this.getSumEntries(goal.description)
           : goalProj
           ? goalProj.sum
           : 0;
+
+        // goal = goal || goalProj;
+        console.log("setting goals, project: ", goal, goalProj);
       });
-      if (this.goals.length == this.$store.state.goals.length)
-        this.$store.commit("setGoals", this.goals);
+      console.log("setting goals :", this.$store.state.goals);
+      this.$store.commit("setGoals", this.$store.state.goals);
     },
   },
 };
