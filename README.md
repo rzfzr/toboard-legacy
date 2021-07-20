@@ -10,7 +10,7 @@ The idea is to have widgets with
 
 Using https://www.npmjs.com/package/toggl-api
 
-![dashboard](https://github.com/rzfzr/toboard/blob/main/screenshots/toboard.gif)
+![dashboard](https://github.com/rzfzr/toboard-legacy/blob/main/screenshots/toboard.gif)
 
 ## Instructions
 
