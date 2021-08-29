@@ -1,6 +1,7 @@
 # toboard
 ## toggl <-> dashboard
-NOT OFICIAL/ AFFILIATED
+
+Development stopped, switched from vuejs to react @ github.com/rzfzr/toboard
 
 The idea is to have widgets with 
 
